@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-11-04T00:00:00Z",
+  "rankings": [
+    {
+      "rank": 1,
+      "movement": 0,
+      "points": 7510,
+      "competitions_played": 24,
+      "competitor": {
+        "id": "sr:competitor:104253",
+        "name": "Pavic, Mate",
+        "country": "Croatia",
+        "country_code": "HRV",
+        "abbreviation": "PAV"
+      }
+    },
+    {
+      "rank": 2,
+      "movement": 0,
+      "points": 7510,
+      "competitions_played": 24,
+      "competitor": {
+        "id": "sr:competitor:128456",
+        "name": "Arevalo-Gonzalez, Marcelo",
+        "country": "El Salvador",
+        "country_code": "SLV",
+        "abbreviation": "ARE"
+      }
+    },
+    {
+      "rank": 3,
+      "movement": 1,
+      "points": 6655,
+      "competitions_played": 22,
+      "competitor": {
+        "id": "sr:competitor:119842",
+        "name": "Thompson, Jordan",
+        "country": "Australia",
+        "country_code": "AUS",
+        "abbreviation": "THO"
+      }
+    },
+    {
+      "rank": 4,
+      "movement": -1,
+      "points": 6450,
+      "competitions_played": 20,
+      "competitor": {
+        "id": "sr:competitor:145612",
+        "name": "Ebden, Matthew",
+        "country": "Australia",
+        "country_code": "AUS",
+        "abbreviation": "EBD"
+      }
+    },
+    {
+      "rank": 5,
+      "movement": 0,
+      "points": 6120,
+      "competitions_played": 21,
+      "competitor": {
+        "id": "sr:competitor:98231",
+        "name": "Bopanna, Rohan",
+        "country": "India",
+        "country_code": "IND",
+        "abbreviation": "BOP"
+      }
+    }
+  ],
+  "competitions": [
+    {
+      "id": "sr:competition:101",
+      "name": "ATP Vienna",
+      "type": "doubles",
+      "gender": "men",
+      "category": {
+        "id": "sr:category:1",
+        "name": "ATP"
+      }
+    },
+    {
+      "id": "sr:competition:102",
+      "name": "Wimbledon Championships",
+      "type": "doubles",
+      "gender": "men",
+      "category": {
+        "id": "sr:category:2",
+        "name": "Grand Slam"
+      }
+    }
+  ]
+}
