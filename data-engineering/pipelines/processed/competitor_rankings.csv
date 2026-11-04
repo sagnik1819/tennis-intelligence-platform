@@ -1,0 +1,11 @@
+rank_id,rank,movement,points,competitions_played,competitor_id
+1,1,0,7510,24,sr:competitor:104253
+2,2,0,7510,24,sr:competitor:128456
+3,3,1,6655,22,sr:competitor:119842
+4,4,-1,6450,20,sr:competitor:145612
+5,5,0,6120,21,sr:competitor:98231
+6,6,2,5890,25,sr:competitor:111223
+7,7,0,5740,19,sr:competitor:132984
+8,8,-2,5320,23,sr:competitor:154876
+9,9,0,5100,22,sr:competitor:162341
+10,10,3,4980,18,sr:competitor:178901

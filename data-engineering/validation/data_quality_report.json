@@ -1,0 +1,128 @@
+{
+  "audit_timestamp": "2026-11-04T11:26:06.366673+00:00",
+  "overall_status": "PASSED",
+  "entities": {
+    "categories": {
+      "entity": "categories",
+      "total_records": 5,
+      "primary_key": "category_id",
+      "duplicate_keys": 0,
+      "missing_values": {
+        "category_id": 0,
+        "category_name": 0
+      },
+      "completeness_percentage": {
+        "category_id": 100.0,
+        "category_name": 100.0
+      },
+      "is_valid": true
+    },
+    "competitions": {
+      "entity": "competitions",
+      "total_records": 7,
+      "primary_key": "competition_id",
+      "duplicate_keys": 0,
+      "missing_values": {
+        "competition_id": 0,
+        "competition_name": 0,
+        "parent_id": 6,
+        "type": 0,
+        "gender": 0,
+        "category_id": 0
+      },
+      "completeness_percentage": {
+        "competition_id": 100.0,
+        "competition_name": 100.0,
+        "parent_id": 14.29,
+        "type": 100.0,
+        "gender": 100.0,
+        "category_id": 100.0
+      },
+      "is_valid": true
+    },
+    "complexes": {
+      "entity": "complexes",
+      "total_records": 4,
+      "primary_key": "complex_id",
+      "duplicate_keys": 0,
+      "missing_values": {
+        "complex_id": 0,
+        "complex_name": 0
+      },
+      "completeness_percentage": {
+        "complex_id": 100.0,
+        "complex_name": 100.0
+      },
+      "is_valid": true
+    },
+    "venues": {
+      "entity": "venues",
+      "total_records": 7,
+      "primary_key": "venue_id",
+      "duplicate_keys": 0,
+      "missing_values": {
+        "venue_id": 0,
+        "venue_name": 0,
+        "city_name": 0,
+        "country_name": 0,
+        "country_code": 0,
+        "timezone": 0,
+        "complex_id": 0
+      },
+      "completeness_percentage": {
+        "venue_id": 100.0,
+        "venue_name": 100.0,
+        "city_name": 100.0,
+        "country_name": 100.0,
+        "country_code": 100.0,
+        "timezone": 100.0,
+        "complex_id": 100.0
+      },
+      "is_valid": true
+    },
+    "competitors": {
+      "entity": "competitors",
+      "total_records": 10,
+      "primary_key": "competitor_id",
+      "duplicate_keys": 0,
+      "missing_values": {
+        "competitor_id": 0,
+        "name": 0,
+        "country": 0,
+        "country_code": 0,
+        "abbreviation": 0
+      },
+      "completeness_percentage": {
+        "competitor_id": 100.0,
+        "name": 100.0,
+        "country": 100.0,
+        "country_code": 100.0,
+        "abbreviation": 100.0
+      },
+      "is_valid": true
+    },
+    "competitor_rankings": {
+      "entity": "competitor_rankings",
+      "total_records": 10,
+      "primary_key": "rank_id",
+      "duplicate_keys": 0,
+      "missing_values": {
+        "rank_id": 0,
+        "rank": 0,
+        "movement": 0,
+        "points": 0,
+        "competitions_played": 0,
+        "competitor_id": 0
+      },
+      "completeness_percentage": {
+        "rank_id": 100.0,
+        "rank": 100.0,
+        "movement": 100.0,
+        "points": 100.0,
+        "competitions_played": 100.0,
+        "competitor_id": 100.0
+      },
+      "is_valid": true
+    }
+  }
+}

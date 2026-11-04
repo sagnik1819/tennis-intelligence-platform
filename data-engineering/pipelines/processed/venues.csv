@@ -1,0 +1,8 @@
+venue_id,venue_name,city_name,country_name,country_code,timezone,complex_id
+sr:venue:301,Center Court Halle D,Vienna,Austria,AUT,Europe/Vienna,sr:complex:201
+sr:venue:302,Courtside Halle B,Vienna,Austria,AUT,Europe/Vienna,sr:complex:201
+sr:venue:303,Court Central Anita Lizana,Santiago,Chile,CHL,America/Santiago,sr:complex:202
+sr:venue:304,Cancha 2 Nacional,Santiago,Chile,CHL,America/Santiago,sr:complex:202
+sr:venue:305,Centre Court Wimbledon,London,United Kingdom,GBR,Europe/London,sr:complex:203
+sr:venue:306,Court No. 1,London,United Kingdom,GBR,Europe/London,sr:complex:203
+sr:venue:307,Cancha Principal Club,Santiago,Chile,CHL,America/Santiago,sr:complex:204

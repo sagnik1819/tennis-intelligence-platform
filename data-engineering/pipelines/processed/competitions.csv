@@ -1,0 +1,8 @@
+competition_id,competition_name,parent_id,type,gender,category_id
+sr:competition:101,ATP Vienna,,doubles,men,sr:category:1
+sr:competition:102,ATP Vienna Qualification,sr:competition:101,doubles,men,sr:category:1
+sr:competition:103,Wimbledon Men's Doubles,,doubles,men,sr:category:5
+sr:competition:104,US Open Men's Doubles,,doubles,men,sr:category:5
+sr:competition:105,ITF Men Zagreb Doubles,,doubles,men,sr:category:3
+sr:competition:106,Roland Garros Doubles,,doubles,men,sr:category:5
+sr:competition:107,ATP Indian Wells Masters,,singles,men,sr:category:1
