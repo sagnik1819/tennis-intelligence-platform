@@ -1,0 +1,85 @@
+{
+  "generated_at": "2026-11-04T10:00:00Z",
+  "complexes": [
+    {
+      "id": "sr:complex:201",
+      "name": "Wiener Stadthalle Complex",
+      "venues": [
+        {
+          "id": "sr:venue:301",
+          "name": "Center Court Halle D",
+          "city_name": "Vienna",
+          "country_name": "Austria",
+          "country_code": "AUT",
+          "timezone": "Europe/Vienna"
+        },
+        {
+          "id": "sr:venue:302",
+          "name": "Courtside Halle B",
+          "city_name": "Vienna",
+          "country_name": "Austria",
+          "country_code": "AUT",
+          "timezone": "Europe/Vienna"
+        }
+      ]
+    },
+    {
+      "id": "sr:complex:202",
+      "name": "Estadio Nacional",
+      "venues": [
+        {
+          "id": "sr:venue:303",
+          "name": "Court Central Anita Lizana",
+          "city_name": "Santiago",
+          "country_name": "Chile",
+          "country_code": "CHL",
+          "timezone": "America/Santiago"
+        },
+        {
+          "id": "sr:venue:304",
+          "name": "Cancha 2 Nacional",
+          "city_name": "Santiago",
+          "country_name": "Chile",
+          "country_code": "CHL",
+          "timezone": "America/Santiago"
+        }
+      ]
+    },
+    {
+      "id": "sr:complex:203",
+      "name": "All England Lawn Tennis Club",
+      "venues": [
+        {
+          "id": "sr:venue:305",
+          "name": "Centre Court Wimbledon",
+          "city_name": "London",
+          "country_name": "United Kingdom",
+          "country_code": "GBR",
+          "timezone": "Europe/London"
+        },
+        {
+          "id": "sr:venue:306",
+          "name": "Court No. 1",
+          "city_name": "London",
+          "country_name": "United Kingdom",
+          "country_code": "GBR",
+          "timezone": "Europe/London"
+        }
+      ]
+    },
+    {
+      "id": "sr:complex:204",
+      "name": "Club de Tenis Santiago",
+      "venues": [
+        {
+          "id": "sr:venue:307",
+          "name": "Cancha Principal Club",
+          "city_name": "Santiago",
+          "country_name": "Chile",
+          "country_code": "CHL",
+          "timezone": "America/Santiago"
+        }
+      ]
+    }
+  ]
+}

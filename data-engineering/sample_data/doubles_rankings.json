@@ -1,0 +1,135 @@
+{
+  "generated_at": "2026-11-04T10:00:00Z",
+  "rankings": [
+    {
+      "rank": 1,
+      "movement": 0,
+      "points": 7510,
+      "competitions_played": 24,
+      "competitor": {
+        "id": "sr:competitor:104253",
+        "name": "Pavic, Mate",
+        "country": "Croatia",
+        "country_code": "HRV",
+        "abbreviation": "PAV"
+      }
+    },
+    {
+      "rank": 2,
+      "movement": 0,
+      "points": 7510,
+      "competitions_played": 24,
+      "competitor": {
+        "id": "sr:competitor:128456",
+        "name": "Arevalo-Gonzalez, Marcelo",
+        "country": "El Salvador",
+        "country_code": "SLV",
+        "abbreviation": "ARE"
+      }
+    },
+    {
+      "rank": 3,
+      "movement": 1,
+      "points": 6655,
+      "competitions_played": 22,
+      "competitor": {
+        "id": "sr:competitor:119842",
+        "name": "Thompson, Jordan",
+        "country": "Australia",
+        "country_code": "AUS",
+        "abbreviation": "THO"
+      }
+    },
+    {
+      "rank": 4,
+      "movement": -1,
+      "points": 6450,
+      "competitions_played": 20,
+      "competitor": {
+        "id": "sr:competitor:145612",
+        "name": "Ebden, Matthew",
+        "country": "Australia",
+        "country_code": "AUS",
+        "abbreviation": "EBD"
+      }
+    },
+    {
+      "rank": 5,
+      "movement": 0,
+      "points": 6120,
+      "competitions_played": 21,
+      "competitor": {
+        "id": "sr:competitor:98231",
+        "name": "Bopanna, Rohan",
+        "country": "India",
+        "country_code": "IND",
+        "abbreviation": "BOP"
+      }
+    },
+    {
+      "rank": 6,
+      "movement": 2,
+      "points": 5890,
+      "competitions_played": 25,
+      "competitor": {
+        "id": "sr:competitor:111223",
+        "name": "Mektic, Nikola",
+        "country": "Croatia",
+        "country_code": "HRV",
+        "abbreviation": "MEK"
+      }
+    },
+    {
+      "rank": 7,
+      "movement": 0,
+      "points": 5740,
+      "competitions_played": 19,
+      "competitor": {
+        "id": "sr:competitor:132984",
+        "name": "Koolhof, Wesley",
+        "country": "Netherlands",
+        "country_code": "NLD",
+        "abbreviation": "KOO"
+      }
+    },
+    {
+      "rank": 8,
+      "movement": -2,
+      "points": 5320,
+      "competitions_played": 23,
+      "competitor": {
+        "id": "sr:competitor:154876",
+        "name": "Salisbury, Joe",
+        "country": "United Kingdom",
+        "country_code": "GBR",
+        "abbreviation": "SAL"
+      }
+    },
+    {
+      "rank": 9,
+      "movement": 0,
+      "points": 5100,
+      "competitions_played": 22,
+      "competitor": {
+        "id": "sr:competitor:162341",
+        "name": "Ram, Rajeev",
+        "country": "United States",
+        "country_code": "USA",
+        "abbreviation": "RAM"
+      }
+    },
+    {
+      "rank": 10,
+      "movement": 3,
+      "points": 4980,
+      "competitions_played": 18,
+      "competitor": {
+        "id": "sr:competitor:178901",
+        "name": "Granollers, Marcel",
+        "country": "Spain",
+        "country_code": "ESP",
+        "abbreviation": "GRA"
+      }
+    }
+  ]
+}

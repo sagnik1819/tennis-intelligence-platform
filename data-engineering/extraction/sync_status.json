@@ -1,0 +1,13 @@
+{
+  "last_sync_timestamp": "2026-11-04T11:06:18.768421+00:00",
+  "status": "SUCCESS",
+  "categories_count": 5,
+  "competitions_count": 7,
+  "complexes_count": 4,
+  "venues_count": 7,
+  "rankings_count": 10,
+  "competitors_count": 10,
+  "errors": [],
+  "duration_seconds": 0.0,
+  "data_mode": "FIXTURE_MOCK"
+}

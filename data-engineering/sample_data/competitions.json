@@ -1,0 +1,83 @@
+{
+  "generated_at": "2026-11-04T10:00:00Z",
+  "categories": [
+    {
+      "id": "sr:category:1",
+      "name": "ATP"
+    },
+    {
+      "id": "sr:category:2",
+      "name": "WTA"
+    },
+    {
+      "id": "sr:category:3",
+      "name": "ITF Men"
+    },
+    {
+      "id": "sr:category:4",
+      "name": "ITF Women"
+    },
+    {
+      "id": "sr:category:5",
+      "name": "Grand Slam"
+    }
+  ],
+  "competitions": [
+    {
+      "id": "sr:competition:101",
+      "name": "ATP Vienna",
+      "parent_id": null,
+      "type": "doubles",
+      "gender": "men",
+      "category": { "id": "sr:category:1", "name": "ATP" }
+    },
+    {
+      "id": "sr:competition:102",
+      "name": "ATP Vienna Qualification",
+      "parent_id": "sr:competition:101",
+      "type": "doubles",
+      "gender": "men",
+      "category": { "id": "sr:category:1", "name": "ATP" }
+    },
+    {
+      "id": "sr:competition:103",
+      "name": "Wimbledon Men's Doubles",
+      "parent_id": null,
+      "type": "doubles",
+      "gender": "men",
+      "category": { "id": "sr:category:5", "name": "Grand Slam" }
+    },
+    {
+      "id": "sr:competition:104",
+      "name": "US Open Men's Doubles",
+      "parent_id": null,
+      "type": "doubles",
+      "gender": "men",
+      "category": { "id": "sr:category:5", "name": "Grand Slam" }
+    },
+    {
+      "id": "sr:competition:105",
+      "name": "ITF Men Zagreb Doubles",
+      "parent_id": null,
+      "type": "doubles",
+      "gender": "men",
+      "category": { "id": "sr:category:3", "name": "ITF Men" }
+    },
+    {
+      "id": "sr:competition:106",
+      "name": "Roland Garros Doubles",
+      "parent_id": null,
+      "type": "doubles",
+      "gender": "men",
+      "category": { "id": "sr:category:5", "name": "Grand Slam" }
+    },
+    {
+      "id": "sr:competition:107",
+      "name": "ATP Indian Wells Masters",
+      "parent_id": null,
+      "type": "singles",
+      "gender": "men",
+      "category": { "id": "sr:category:1", "name": "ATP" }
+    }
+  ]
+}
