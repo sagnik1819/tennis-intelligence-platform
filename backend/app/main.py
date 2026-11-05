@@ -3,9 +3,16 @@ Tennis Intelligence Platform (TIP) - Main FastAPI Application
 """
 import os
 import sys
+import io
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+
+# Fix Windows cp1252 console encoding safely
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 # Setup python paths
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -16,28 +23,39 @@ sys.path.append(PROJECT_ROOT)
 from app.core.config import settings
 from app.api.v1.api import api_router
 from app.database.connection import engine, Base, SessionLocal
-from app.models.entities import Competitor
+
+# Import ALL models so Base.metadata knows every table before create_all
+from app.models.entities import (  # noqa: F401
+    Category, Competition, Complex, Venue,
+    Competitor, CompetitorRanking,
+    User, UserFavourite, AIInteraction, SyncLog
+)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup & Shutdown lifecycle handler."""
-    # Ensure tables exist
+    # Create all tables (models are already imported above)
     Base.metadata.create_all(bind=engine)
-    
+    print("[INFO] Database tables ensured.")
+
     # Auto-seed if empty
     db = SessionLocal()
     try:
         count = db.query(Competitor).count()
         if count == 0:
             print("[INFO] Database empty. Triggering automated seed pipeline...")
-            from sql.seed_database import seed_database
+            sys.path.append(os.path.join(PROJECT_ROOT, "sql"))
+            from seed_database import seed_database
             seed_database()
+            print("[INFO] Database seeding complete.")
     except Exception as e:
         print(f"[WARNING] Database check/seed error: {e}")
+        import traceback
+        traceback.print_exc()
     finally:
         db.close()
-    
+
     yield
     print("[INFO] Shutting down Tennis Intelligence Platform API.")
 

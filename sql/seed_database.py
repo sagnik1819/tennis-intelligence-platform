@@ -5,9 +5,16 @@ from Module 3 into the database. Also seeds demo users and sync history.
 """
 import os
 import sys
+import io
 import hashlib
 import pandas as pd
 from sqlalchemy.orm import Session
+
+# Fix Windows cp1252 console encoding
+if sys.stdout and hasattr(sys.stdout, 'buffer'):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+if sys.stderr and hasattr(sys.stderr, 'buffer'):
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 # Setup project import paths
 CURR_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +33,7 @@ def hash_password(password: str) -> str:
 
 def seed_database():
     print("=" * 85)
-    print("      🎾 TENNIS INTELLIGENCE PLATFORM - MODULE 4 DATABASE INITIALIZATION 🎾")
+    print("      [TIP] TENNIS INTELLIGENCE PLATFORM - MODULE 4 DATABASE INITIALIZATION")
     print("=" * 85)
 
     # 1. Create tables

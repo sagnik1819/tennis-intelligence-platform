@@ -5,10 +5,9 @@ Uses Starlette/FastAPI TestClient to verify all REST endpoints, status codes, an
 import os
 import sys
 
-# Ensure UTF-8 output on Windows consoles
-if sys.platform == "win32":
-    import io
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+# Ensure UTF-8 output on Windows consoles safely
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 CURR_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(CURR_DIR, ".."))
@@ -23,7 +22,7 @@ client = TestClient(app)
 
 def run_tests():
     print("=" * 85)
-    print("      🎾 TENNIS INTELLIGENCE PLATFORM - BACKEND REST API TEST SUITE 🎾")
+    print("      [TIP] TENNIS INTELLIGENCE PLATFORM - BACKEND REST API TEST SUITE")
     print("=" * 85)
 
     endpoints = [

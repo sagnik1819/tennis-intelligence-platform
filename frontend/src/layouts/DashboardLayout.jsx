@@ -8,6 +8,7 @@ import {
   Trophy,
   Bot,
   Bookmark,
+  FileText,
   ShieldCheck,
   Menu,
   X,
@@ -27,6 +28,7 @@ const NAV_ITEMS = [
   { name: 'Competitions & Venues', path: '/app/competitions', icon: Trophy },
   { name: 'AI Tennis Assistant', path: '/app/assistant', icon: Bot },
   { name: 'User Workspace', path: '/app/workspace', icon: Bookmark },
+  { name: 'Reports & Analytics', path: '/app/reports', icon: FileText },
   { name: 'Data Quality & Admin', path: '/app/data-quality', icon: ShieldCheck },
 ];
 
