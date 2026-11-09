@@ -34,9 +34,13 @@ jobs:
 
     - name: Run Module 4 SQL 20-Query Verification
       run: python sql/test_queries.py
+      env:
+        PYTHONPATH: "backend:machine-learning/models:."
 
     - name: Run Module 5 & Endpoints Verification
       run: python backend/test_backend.py
+      env:
+        PYTHONPATH: "backend:machine-learning/models:."
 
   frontend-build:
     runs-on: ubuntu-latest

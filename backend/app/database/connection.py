@@ -14,6 +14,9 @@ if not DATABASE_URL or DATABASE_URL.strip() == "":
     BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
     db_path = os.path.join(BASE_DIR, "tennis_intelligence.db")
     DATABASE_URL = f"sqlite:///{db_path}"
+elif DATABASE_URL.startswith("postgres://"):
+    # SQLAlchemy 2.0 requires postgresql:// instead of postgres://
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # SQLite requires 'check_same_thread: False'
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
