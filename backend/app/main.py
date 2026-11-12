@@ -22,13 +22,13 @@ sys.path.append(PROJECT_ROOT)
 
 from app.core.config import settings
 from app.api.v1.api import api_router
-from app.database.connection import engine, Base, SessionLocal
+from app.database.connection import engine, Base, SessionLocal, ensure_schema_migrations
 
 # Import ALL models so Base.metadata knows every table before create_all
 from app.models.entities import (  # noqa: F401
     Category, Competition, Complex, Venue,
     Competitor, CompetitorRanking,
-    User, UserFavourite, AIInteraction, SyncLog
+    User, OTPVerification, UserFavourite, AIInteraction, SyncLog
 )
 
 
@@ -37,7 +37,8 @@ async def lifespan(app: FastAPI):
     """Startup & Shutdown lifecycle handler."""
     # Create all tables (models are already imported above)
     Base.metadata.create_all(bind=engine)
-    print("[INFO] Database tables ensured.")
+    ensure_schema_migrations()
+    print("[INFO] Database tables and migrations ensured.")
 
     # Auto-seed if empty
     db = SessionLocal()

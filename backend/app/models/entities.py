@@ -1,15 +1,18 @@
 """
 Module 4: SQLAlchemy Relational ORM Models
-Defines all 10 entities, foreign keys, relationships, and table constraints.
+Defines all 11 entities (including OTP verifications & OAuth fields), foreign keys, and constraints.
 """
 from datetime import datetime, timezone
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Text, Numeric, UniqueConstraint
+from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, Text, Numeric, UniqueConstraint
 from sqlalchemy.orm import relationship
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "database")))
-from connection import Base
+try:
+    from app.database.connection import Base
+except ImportError:
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "database")))
+    from connection import Base
 
 
 class Category(Base):
@@ -89,13 +92,33 @@ class User(Base):
 
     user_id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String(255), unique=True, nullable=False, index=True)
-    hashed_password = Column(String(255), nullable=False)
+    hashed_password = Column(String(255), nullable=True)
     full_name = Column(String(100), nullable=True)
+    phone_number = Column(String(30), nullable=True, index=True)
+    auth_provider = Column(String(20), nullable=False, default="local")
+    google_id = Column(String(255), unique=True, nullable=True, index=True)
+    avatar_url = Column(String(500), nullable=True)
+    is_email_verified = Column(Boolean, nullable=False, default=False)
+    is_phone_verified = Column(Boolean, nullable=False, default=False)
     role = Column(String(20), nullable=False, default="user")
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     favourites = relationship("UserFavourite", back_populates="user", cascade="all, delete-orphan")
     ai_interactions = relationship("AIInteraction", back_populates="user")
+
+
+class OTPVerification(Base):
+    __tablename__ = "otp_verifications"
+
+    otp_id = Column(Integer, primary_key=True, autoincrement=True)
+    target = Column(String(255), nullable=False, index=True)
+    channel = Column(String(20), nullable=False)  # "email" or "phone"
+    purpose = Column(String(30), nullable=False, default="register")
+    otp_hash = Column(String(255), nullable=False)
+    attempts = Column(Integer, nullable=False, default=0)
+    is_used = Column(Boolean, nullable=False, default=False)
+    expires_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 class UserFavourite(Base):

@@ -8,12 +8,49 @@ from pydantic import BaseModel, Field, EmailStr
 
 
 # ==========================================
-# AUTHENTICATION SCHEMAS
+# AUTHENTICATION & VERIFICATION SCHEMAS
 # ==========================================
 class UserRegister(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=6, description="Password min 6 chars")
     full_name: Optional[str] = "Tennis Analyst"
+    phone_number: Optional[str] = Field(None, description="Optional E.164 phone number e.g. +919876543210")
+
+
+class RegisterPendingResponse(BaseModel):
+    requires_verification: bool = True
+    email: str
+    message: str
+
+
+class VerifyEmailOTPRequest(BaseModel):
+    email: EmailStr
+    otp: str = Field(..., min_length=6, max_length=6, pattern=r"^\d{6}$")
+
+
+class ResendEmailOTPRequest(BaseModel):
+    email: EmailStr
+
+
+class GoogleAuthRequest(BaseModel):
+    credential: str = Field(..., min_length=10, description="Google Identity Services ID token")
+
+
+class SendPhoneOTPRequest(BaseModel):
+    phone_number: str = Field(..., min_length=8, max_length=20, pattern=r"^\+[1-9]\d{6,14}$")
+
+
+class VerifyPhoneOTPRequest(BaseModel):
+    phone_number: str = Field(..., min_length=8, max_length=20, pattern=r"^\+[1-9]\d{6,14}$")
+    otp: str = Field(..., min_length=6, max_length=6, pattern=r"^\d{6}$")
+
+
+class AuthProvidersStatusResponse(BaseModel):
+    gmail_otp_enabled: bool
+    google_enabled: bool
+    google_client_id: Optional[str] = None
+    sms_otp_enabled: bool
+    sms_provider: str
 
 
 class UserLogin(BaseModel):
@@ -30,9 +67,14 @@ class TokenResponse(BaseModel):
 class UserResponse(BaseModel):
     user_id: int
     email: str
-    full_name: Optional[str]
+    full_name: Optional[str] = None
+    phone_number: Optional[str] = None
+    auth_provider: str = "local"
+    avatar_url: Optional[str] = None
+    is_email_verified: bool = False
+    is_phone_verified: bool = False
     role: str
-    created_at: Optional[datetime]
+    created_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True

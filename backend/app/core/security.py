@@ -30,8 +30,10 @@ def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode("utf-8"), salt).decode("utf-8")
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
+def verify_password(plain_password: Optional[str], hashed_password: Optional[str]) -> bool:
     """Verifies a plaintext password against a bcrypt hash."""
+    if not hashed_password or not plain_password or hashed_password == "!GOOGLE_OAUTH_ONLY!":
+        return False
     try:
         return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
     except Exception:

@@ -10,11 +10,11 @@ import hashlib
 import pandas as pd
 from sqlalchemy.orm import Session
 
-# Fix Windows cp1252 console encoding
-if sys.stdout and hasattr(sys.stdout, 'buffer'):
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-if sys.stderr and hasattr(sys.stderr, 'buffer'):
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+# Fix Windows cp1252 console encoding safely
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 # Setup project import paths
 CURR_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -124,13 +124,19 @@ def seed_database():
             email="admin@tennisintel.com",
             hashed_password=hash_password("Admin@123"),
             full_name="Lead System Architect",
-            role="admin"
+            role="admin",
+            auth_provider="local",
+            is_email_verified=True,
+            is_phone_verified=False
         )
         demo_user = User(
             email="analyst@tennisintel.com",
             hashed_password=hash_password("Analyst@123"),
             full_name="Sports Performance Analyst",
-            role="user"
+            role="user",
+            auth_provider="local",
+            is_email_verified=True,
+            is_phone_verified=False
         )
         db.add(admin_user)
         db.add(demo_user)

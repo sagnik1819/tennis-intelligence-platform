@@ -247,7 +247,75 @@ export const TennisAPI = {
     }
   },
 
-  // Auth
+  // Auth & Verification
+  getAuthProviders: async () => {
+    try {
+      const res = await apiClient.get('/auth/providers');
+      return res.data;
+    } catch {
+      return {
+        gmail_otp_enabled: false,
+        google_enabled: Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID),
+        google_client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || null,
+        sms_otp_enabled: true,
+        sms_provider: 'textbelt',
+      };
+    }
+  },
+
+  registerWithEmail: async ({ full_name, email, password, phone_number }) => {
+    const payload = { full_name, email, password };
+    if (phone_number && phone_number.trim()) {
+      payload.phone_number = phone_number.trim();
+    }
+    const res = await apiClient.post('/auth/register', payload);
+    return res.data;
+  },
+
+  verifyEmailOTP: async (email, otp) => {
+    const res = await apiClient.post('/auth/verify-email-otp', { email, otp });
+    if (res.data.access_token) {
+      localStorage.setItem('tip_token', res.data.access_token);
+      localStorage.setItem('tip_user', JSON.stringify(res.data.user));
+    }
+    return res.data;
+  },
+
+  resendEmailOTP: async (email) => {
+    const res = await apiClient.post('/auth/resend-email-otp', { email });
+    return res.data;
+  },
+
+  googleLogin: async (credential) => {
+    const res = await apiClient.post('/auth/google', { credential });
+    if (res.data.access_token) {
+      localStorage.setItem('tip_token', res.data.access_token);
+      localStorage.setItem('tip_user', JSON.stringify(res.data.user));
+    }
+    return res.data;
+  },
+
+  sendPhoneOTP: async (phone_number) => {
+    const res = await apiClient.post('/auth/send-phone-otp', { phone_number });
+    return res.data;
+  },
+
+  verifyPhoneOTP: async (phone_number, otp) => {
+    const res = await apiClient.post('/auth/verify-phone-otp', { phone_number, otp });
+    if (res.data) {
+      localStorage.setItem('tip_user', JSON.stringify(res.data));
+    }
+    return res.data;
+  },
+
+  getProfile: async () => {
+    const res = await apiClient.get('/auth/me');
+    if (res.data) {
+      localStorage.setItem('tip_user', JSON.stringify(res.data));
+    }
+    return res.data;
+  },
+
   login: async (email, password) => {
     const res = await apiClient.post('/auth/login', { email, password });
     if (res.data.access_token) {

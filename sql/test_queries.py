@@ -5,10 +5,9 @@ Runs every single query from the syllabus against the seeded database and verifi
 import os
 import sys
 
-# Ensure UTF-8 output on Windows consoles
-if sys.platform == "win32":
-    import io
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+# Ensure UTF-8 output on Windows consoles safely
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 # Path setup
 CURR_DIR = os.path.dirname(os.path.abspath(__file__))

@@ -92,12 +92,18 @@ export default function DashboardLayout({ children }) {
 
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="w-8 h-8 rounded-full bg-slateBorder flex items-center justify-center font-bold text-xs text-white uppercase">
-                {user ? user.full_name?.charAt(0) : 'G'}
-              </div>
+              {user?.avatar_url ? (
+                <img src={user.avatar_url} alt={user.full_name || 'User'} className="w-8 h-8 rounded-full object-cover border border-tennis-green/40" />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-slateBorder flex items-center justify-center font-bold text-xs text-white uppercase">
+                  {user ? (user.full_name?.charAt(0) || user.email?.charAt(0)) : 'G'}
+                </div>
+              )}
               <div className="overflow-hidden">
-                <p className="text-xs font-semibold truncate text-white">{user ? user.full_name : 'Guest Analyst'}</p>
-                <p className="text-[10px] text-textMuted truncate">{user ? user.role : 'Read-Only'}</p>
+                <p className="text-xs font-semibold truncate text-white">{user ? (user.full_name || user.email) : 'Guest Analyst'}</p>
+                <p className="text-[10px] text-textMuted truncate">
+                  {user ? (user.is_email_verified ? `${user.role} • Verified` : user.role) : 'Read-Only'}
+                </p>
               </div>
             </div>
             {user ? (

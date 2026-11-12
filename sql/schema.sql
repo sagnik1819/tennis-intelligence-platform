@@ -4,6 +4,7 @@
 -- ==============================================================================
 
 -- Drop tables if re-initializing (in reverse foreign-key order)
+DROP TABLE IF EXISTS otp_verifications CASCADE;
 DROP TABLE IF EXISTS ai_interactions CASCADE;
 DROP TABLE IF EXISTS user_favourites CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
@@ -71,13 +72,32 @@ CREATE TABLE competitor_rankings (
     CONSTRAINT fk_ranking_competitor FOREIGN KEY (competitor_id) REFERENCES competitors(competitor_id) ON DELETE CASCADE
 );
 
--- 7. USERS TABLE (Authentication & Roles)
+-- 7. USERS TABLE (Authentication, Google OAuth, Email & Phone Verification)
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
-    hashed_password VARCHAR(255) NOT NULL,
+    hashed_password VARCHAR(255) NULL,
     full_name VARCHAR(100),
+    phone_number VARCHAR(30) NULL,
+    auth_provider VARCHAR(20) NOT NULL DEFAULT 'local',
+    google_id VARCHAR(255) UNIQUE NULL,
+    avatar_url VARCHAR(500) NULL,
+    is_email_verified BOOLEAN NOT NULL DEFAULT FALSE,
+    is_phone_verified BOOLEAN NOT NULL DEFAULT FALSE,
     role VARCHAR(20) NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 7B. OTP_VERIFICATIONS TABLE (Hashed 6-digit Email & SMS OTPs)
+CREATE TABLE otp_verifications (
+    otp_id SERIAL PRIMARY KEY,
+    target VARCHAR(255) NOT NULL,
+    channel VARCHAR(20) NOT NULL CHECK (channel IN ('email', 'phone')),
+    purpose VARCHAR(30) NOT NULL DEFAULT 'register',
+    otp_hash VARCHAR(255) NOT NULL,
+    attempts INT NOT NULL DEFAULT 0,
+    is_used BOOLEAN NOT NULL DEFAULT FALSE,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -124,3 +144,5 @@ CREATE INDEX idx_rankings_rank ON competitor_rankings(rank);
 CREATE INDEX idx_rankings_points ON competitor_rankings(points DESC);
 CREATE INDEX idx_rankings_competitor ON competitor_rankings(competitor_id);
 CREATE INDEX idx_user_favourites_user ON user_favourites(user_id);
+CREATE INDEX idx_otp_target_channel ON otp_verifications(target, channel);
+CREATE INDEX idx_users_google_id ON users(google_id);
