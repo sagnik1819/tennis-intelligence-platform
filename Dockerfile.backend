@@ -25,7 +25,8 @@ COPY machine-learning/ ./machine-learning/
 
 # Set Python path
 ENV PYTHONPATH=/app/backend:/app/machine-learning/models:/app
+ENV WEB_CONCURRENCY=4
 
 EXPOSE 8000
 
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers ${WEB_CONCURRENCY:-4} --backlog 2048 --timeout-keep-alive 30 --no-access-log"]

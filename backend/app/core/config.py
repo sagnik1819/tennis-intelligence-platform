@@ -31,6 +31,28 @@ class Settings:
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
+    # High-Concurrency Caching (L1 In-Memory + Optional L2 Redis)
+    REDIS_URL: str = os.getenv("REDIS_URL", "").strip()
+    CACHE_MAX_ENTRIES: int = int(os.getenv("CACHE_MAX_ENTRIES", "2048"))
+    CACHE_TTL_PLAYERS: int = int(os.getenv("CACHE_TTL_PLAYERS", "120"))
+    CACHE_TTL_ANALYTICS: int = int(os.getenv("CACHE_TTL_ANALYTICS", "120"))
+    CACHE_TTL_CATALOG: int = int(os.getenv("CACHE_TTL_CATALOG", "300"))
+    CDN_MAX_AGE: int = int(os.getenv("CDN_MAX_AGE", "60"))
+    CDN_S_MAXAGE: int = int(os.getenv("CDN_S_MAXAGE", "120"))
+
+    # Tiered Rate Limiting (Protects Origin Under Spikes / Brute Force)
+    RATE_LIMIT_ENABLED: bool = os.getenv("RATE_LIMIT_ENABLED", "true").strip().lower() in ("1", "true", "yes")
+    TRUST_PROXY_HEADERS: bool = os.getenv("TRUST_PROXY_HEADERS", "true").strip().lower() in ("1", "true", "yes")
+    RATE_LIMIT_READ_PER_MIN: int = int(os.getenv("RATE_LIMIT_READ_PER_MIN", "12000"))
+    RATE_LIMIT_AUTH_PER_MIN: int = int(os.getenv("RATE_LIMIT_AUTH_PER_MIN", "30"))
+    RATE_LIMIT_CHAT_PER_MIN: int = int(os.getenv("RATE_LIMIT_CHAT_PER_MIN", "60"))
+
+    # Database Pool Tuning (PostgreSQL / Neon PgBouncer)
+    DB_POOL_SIZE: int = int(os.getenv("DB_POOL_SIZE", "20"))
+    DB_MAX_OVERFLOW: int = int(os.getenv("DB_MAX_OVERFLOW", "40"))
+    DB_POOL_TIMEOUT: int = int(os.getenv("DB_POOL_TIMEOUT", "15"))
+    DB_POOL_RECYCLE: int = int(os.getenv("DB_POOL_RECYCLE", "300"))
+
     # Gmail SMTP (Real Email OTP Verification)
     SMTP_HOST: str = os.getenv("SMTP_HOST", "smtp.gmail.com")
     SMTP_PORT: int = int(os.getenv("SMTP_PORT", "465"))

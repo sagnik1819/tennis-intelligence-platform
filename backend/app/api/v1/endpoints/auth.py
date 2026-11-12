@@ -50,7 +50,7 @@ def _serialize_user(user: User) -> dict:
 
 
 @router.get("/providers", response_model=AuthProvidersStatusResponse)
-def get_auth_providers_status():
+async def get_auth_providers_status():
     """Returns live readiness flags for Gmail OTP, Google OAuth, and Free SMS OTP."""
     return {
         "gmail_otp_enabled": settings.is_gmail_configured,

@@ -20,7 +20,21 @@ services:
       timeout: 5s
       retries: 5
 
-  # FastAPI Backend Service
+  # Distributed L2 Redis Cache & Multi-Worker Rate Limiter
+  redis:
+    image: redis:7-alpine
+    container_name: tip_redis
+    restart: always
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Multi-Worker FastAPI Backend Service
   backend:
     build:
       context: .
@@ -29,6 +43,8 @@ services:
     restart: always
     environment:
       DATABASE_URL: postgresql://tennis_admin:TennisPassword@2026@db:5432/tennis_intelligence
+      REDIS_URL: redis://redis:6379/0
+      WEB_CONCURRENCY: "4"
       JWT_SECRET_KEY: tennis-intelligence-super-secret-production-key-32-chars-long!
       ENVIRONMENT: production
     ports:
@@ -36,8 +52,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
-  # React Frontend Service
+  # React Frontend + Nginx Micro-Cache Reverse Proxy
   frontend:
     build:
       context: .

@@ -16,14 +16,18 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-# Setup project import paths
+# Setup project import paths (always prefer backend/app namespace for single SQLAlchemy Base)
 CURR_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(CURR_DIR, ".."))
-sys.path.append(os.path.join(PROJECT_ROOT, "backend", "app", "database"))
-sys.path.append(os.path.join(PROJECT_ROOT, "backend", "app", "models"))
+BACKEND_DIR = os.path.join(PROJECT_ROOT, "backend")
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
 
-from connection import engine, SessionLocal, Base
-from entities import Category, Competition, Complex, Venue, Competitor, CompetitorRanking, User, SyncLog
+from app.database.connection import engine, SessionLocal, Base
+from app.models.entities import (  # noqa: F401
+    Category, Competition, Complex, Venue, Competitor,
+    CompetitorRanking, User, OTPVerification, UserFavourite, AIInteraction, SyncLog
+)
 
 
 def hash_password(password: str) -> str:

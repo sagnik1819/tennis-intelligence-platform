@@ -10,8 +10,25 @@ const apiClient = axios.create({
   },
 });
 
-// Interceptor to inject JWT token
+// Omit Authorization on stateless public catalog/analytics routes so CDN edge caches remain warm
+const STATELESS_PUBLIC_PATHS = new Set([
+  '/analytics/kpis',
+  '/analytics/countries',
+  '/analytics/compare',
+  '/players',
+  '/rankings/top',
+  '/competitions',
+  '/venues',
+  '/venues/complexes',
+  '/auth/providers',
+]);
+
+// Interceptor to inject JWT token only where user context is needed
 apiClient.interceptors.request.use((config) => {
+  const cleanPath = (config.url || '').split('?')[0];
+  if (STATELESS_PUBLIC_PATHS.has(cleanPath)) {
+    return config;
+  }
   const token = localStorage.getItem('tip_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

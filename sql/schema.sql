@@ -145,4 +145,6 @@ CREATE INDEX idx_rankings_points ON competitor_rankings(points DESC);
 CREATE INDEX idx_rankings_competitor ON competitor_rankings(competitor_id);
 CREATE INDEX idx_user_favourites_user ON user_favourites(user_id);
 CREATE INDEX idx_otp_target_channel ON otp_verifications(target, channel);
+CREATE INDEX idx_otp_lookup ON otp_verifications(target, channel, is_used);
+CREATE INDEX ix_ai_interactions_user_id ON ai_interactions(user_id);
 CREATE INDEX idx_users_google_id ON users(google_id);

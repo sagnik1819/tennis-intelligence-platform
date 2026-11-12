@@ -12,11 +12,14 @@ if hasattr(sys.stdout, "reconfigure"):
 # Path setup
 CURR_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(CURR_DIR, ".."))
-sys.path.append(os.path.join(PROJECT_ROOT, "backend", "app", "database"))
-sys.path.append(CURR_DIR)
+BACKEND_DIR = os.path.join(PROJECT_ROOT, "backend")
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
+if CURR_DIR not in sys.path:
+    sys.path.append(CURR_DIR)
 
 from sqlalchemy import text
-from connection import engine
+from app.database.connection import engine
 from seed_database import seed_database
 
 

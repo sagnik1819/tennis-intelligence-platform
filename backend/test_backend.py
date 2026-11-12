@@ -3,8 +3,10 @@ Backend Verification Suite
 Uses Starlette/FastAPI TestClient (with lifespan context) to verify all REST endpoints,
 analytics, AI assistant, JWT auth, Gmail OTP verification, Google OAuth, and Phone SMS OTP.
 """
+from concurrent.futures import ThreadPoolExecutor
 import os
 import sys
+import threading
 from unittest.mock import patch
 
 # Ensure UTF-8 output on Windows consoles safely
@@ -18,6 +20,7 @@ sys.path.append(PROJECT_ROOT)
 
 from starlette.testclient import TestClient
 from app.main import app
+from app.core.cache import cache_service
 from app.core.config import settings
 from app.database.connection import SessionLocal
 from app.models.entities import User, OTPVerification
@@ -38,6 +41,7 @@ def run_tests():
             ("GET", "/api/v1/analytics/kpis", 200),
             ("GET", "/api/v1/analytics/countries", 200),
             ("GET", "/api/v1/admin/data-quality", 200),
+            ("GET", "/api/v1/admin/performance", 200),
             ("GET", "/api/v1/auth/providers", 200),
         ]
 
@@ -207,8 +211,65 @@ def run_tests():
         finally:
             db.close()
 
+        # Test High-Concurrency Features: L1 Cache, Edge CDN Headers, GZip, Single-Flight & Rate Limit
+        print("\n[TESTING HIGH-CONCURRENCY CACHING, HEADERS, GZIP, SINGLE-FLIGHT & RATE LIMITER]")
+
+        # 1. Edge CDN Cache-Control & Vary Headers + L1 Hit Verification
+        stats_before = client.get("/api/v1/admin/performance").json()["cache"]["hits_l1"]
+        pub_resp = client.get("/api/v1/players", headers={"Accept-Encoding": "gzip"})
+        assert pub_resp.status_code == 200
+        cc_pub = pub_resp.headers.get("cache-control", "")
+        assert "public" in cc_pub and "s-maxage" in cc_pub, f"Expected CDN Cache-Control, got {cc_pub}"
+        assert "authorization" in pub_resp.headers.get("vary", "").lower()
+        assert pub_resp.headers.get("x-response-time-ms") is not None
+        assert "gzip" in pub_resp.headers.get("content-encoding", "").lower()
+        stats_after = client.get("/api/v1/admin/performance").json()["cache"]["hits_l1"]
+        assert stats_after > stats_before, "Expected L1 cache hit count to increment on repeated read"
+        print(f"[PASS] CDN Cache-Control='{cc_pub}', GZip active, L1 hits={stats_after}")
+
+        # 2. Private Auth Route must NEVER be publicly cached
+        priv_resp = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
+        assert priv_resp.status_code == 200
+        assert "no-store" in priv_resp.headers.get("cache-control", "")
+        print(f"[PASS] Authenticated /auth/me Cache-Control='{priv_resp.headers.get('cache-control')}'")
+
+        # 3. Single-flight Stampede Lock Verification (20 threads miss at once -> 1 computation)
+        call_counter = {"count": 0}
+        counter_lock = threading.Lock()
+        barrier = threading.Barrier(20)
+
+        def heavy_loader():
+            with counter_lock:
+                call_counter["count"] += 1
+            return {"ok": True}
+
+        test_sf_key = "test:singleflight:verify"
+        cache_service.invalidate_prefix("test:singleflight:")
+
+        def worker():
+            barrier.wait()
+            return cache_service.get_or_compute(test_sf_key, 30, heavy_loader)
+
+        with ThreadPoolExecutor(max_workers=20) as pool:
+            results = list(pool.map(lambda _: worker(), range(20)))
+        assert all(r == {"ok": True} for r in results)
+        assert call_counter["count"] == 1, f"Expected single-flight count=1, got {call_counter['count']}"
+        cache_service.invalidate_prefix("test:singleflight:")
+        print("[PASS] Single-flight lock coalesced 20 concurrent cache misses into 1 DB/ML load")
+
+        # 4. Rate Limiter Enforcement (HTTP 429 + Retry-After)
+        with patch.object(settings, "RATE_LIMIT_CHAT_PER_MIN", 3):
+            rl_headers = {"X-Forwarded-For": "203.0.113.77"}
+            for _ in range(3):
+                ok_r = client.post("/api/v1/assistant/chat", json={"prompt": "Top players"}, headers=rl_headers)
+                assert ok_r.status_code == 200
+            blocked_r = client.post("/api/v1/assistant/chat", json={"prompt": "Top players"}, headers=rl_headers)
+            assert blocked_r.status_code == 429, f"Expected 429, got {blocked_r.status_code}"
+            assert blocked_r.headers.get("retry-after") is not None
+            print("[PASS] Tiered Rate Limiter returned HTTP 429 + Retry-After cleanly when threshold exceeded")
+
     print("\n" + "=" * 85)
-    print("      ALL BACKEND ENDPOINTS, GMAIL OTP, GOOGLE OAUTH & SMS VERIFIED 100%!")
+    print("      ALL BACKEND ENDPOINTS, GMAIL OTP, GOOGLE OAUTH, SMS & HIGH-CONCURRENCY VERIFIED 100%!")
     print("=" * 85 + "\n")
 
 

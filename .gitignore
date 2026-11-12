@@ -17,7 +17,10 @@ dist/
 # Database / Secrets
 *.sqlite3
 *.db
+*.db-wal
+*.db-shm
 .env.local
 .env.production
 .DS_Store
 Thumbs.db
+.agent/

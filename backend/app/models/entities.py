@@ -3,7 +3,7 @@ Module 4: SQLAlchemy Relational ORM Models
 Defines all 11 entities (including OTP verifications & OAuth fields), foreign keys, and constraints.
 """
 from datetime import datetime, timezone
-from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, Text, Numeric, UniqueConstraint
+from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, Text, Numeric, UniqueConstraint, Index
 from sqlalchemy.orm import relationship
 import sys
 import os
@@ -120,6 +120,8 @@ class OTPVerification(Base):
     expires_at = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
+    __table_args__ = (Index("idx_otp_lookup", "target", "channel", "is_used"),)
+
 
 class UserFavourite(Base):
     __tablename__ = "user_favourites"
@@ -139,7 +141,7 @@ class AIInteraction(Base):
     __tablename__ = "ai_interactions"
 
     interaction_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=True)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=True, index=True)
     prompt = Column(Text, nullable=False)
     response = Column(Text, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
