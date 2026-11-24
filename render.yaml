@@ -1,12 +1,12 @@
 services:
-  # FastAPI Backend Service on Render (Multi-Worker + Redis L2 Ready)
+  # 1. FastAPI Backend Service on Render
   - type: web
     name: tennis-intelligence-backend
     runtime: python
     region: oregon
     plan: free
     buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
-    startCommand: "python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers ${WEB_CONCURRENCY:-2} --backlog 2048 --timeout-keep-alive 30 --no-access-log --app-dir backend"
+    startCommand: "python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2 --app-dir backend"
     envVars:
       - key: PYTHONPATH
         value: "backend:machine-learning/models:."
@@ -19,8 +19,23 @@ services:
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: CORS_ORIGINS
-        value: "https://tennis-intelligence.vercel.app,http://localhost:5173,http://localhost:3000"
+        value: "https://tennis-intelligence-frontend.onrender.com,http://localhost:5173"
       - key: DATABASE_URL
         sync: false
-      - key: REDIS_URL
-        sync: false
+
+  # 2. React Frontend Static Site on Render
+  - type: web
+    name: tennis-intelligence-frontend
+    runtime: static
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: "https://tennis-intelligence-backend.onrender.com/api/v1"
