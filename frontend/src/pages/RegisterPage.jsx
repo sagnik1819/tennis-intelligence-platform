@@ -69,11 +69,18 @@ export default function RegisterPage() {
       });
       if (res.requires_verification) {
         setStatusMessage(res.message || `6-digit OTP sent to ${email}`);
+        if (res.dev_otp) {
+          setOtp(res.dev_otp);
+        }
         setStep('verify-otp');
         setCooldown(30);
       }
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed. Please verify your details.');
+      if (!err.response) {
+        setError('Cannot connect to backend server. Please verify the FastAPI backend is running on http://localhost:8000.');
+      } else {
+        setError(err.response?.data?.detail || 'Registration failed. Please verify your details.');
+      }
     } finally {
       setLoading(false);
     }
@@ -87,7 +94,11 @@ export default function RegisterPage() {
       await TennisAPI.verifyEmailOTP(email, otp.trim());
       navigate('/app');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Invalid or expired OTP code.');
+      if (!err.response) {
+        setError('Cannot connect to backend server. Please verify the FastAPI backend is running.');
+      } else {
+        setError(err.response?.data?.detail || 'Invalid or expired OTP code.');
+      }
     } finally {
       setLoading(false);
     }
@@ -101,9 +112,16 @@ export default function RegisterPage() {
     try {
       const res = await TennisAPI.resendEmailOTP(email);
       setStatusMessage(res.message || `A new OTP was sent to ${email}.`);
+      if (res.dev_otp) {
+        setOtp(res.dev_otp);
+      }
       setCooldown(30);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Could not resend OTP right now.');
+      if (!err.response) {
+        setError('Cannot connect to backend server.');
+      } else {
+        setError(err.response?.data?.detail || 'Could not resend OTP right now.');
+      }
     } finally {
       setLoading(false);
     }

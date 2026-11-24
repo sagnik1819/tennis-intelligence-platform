@@ -25,6 +25,8 @@ export default function LoginPage() {
       if (err.response?.status === 403 && detail === 'EMAIL_NOT_VERIFIED') {
         setNeedsVerification(true);
         setError('Your email is not verified yet. Please verify with your 6-digit Gmail OTP.');
+      } else if (!err.response) {
+        setError('Cannot connect to backend server. Please verify the FastAPI backend is running on http://localhost:8000.');
       } else {
         setError(detail || 'Invalid email or password. Please verify credentials.');
       }

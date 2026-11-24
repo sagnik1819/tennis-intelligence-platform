@@ -76,17 +76,6 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
             detail="An account with this email address already exists. Please sign in.",
         )
 
-    # Validate Gmail SMTP readiness before mutating user records
-    if not settings.is_gmail_configured:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=(
-                "Real Gmail OTP requires SMTP_EMAIL and SMTP_APP_PASSWORD in your .env file. "
-                "Generate a free 16-char App Password at myaccount.google.com/apppasswords, "
-                "or use Continue with Google."
-            ),
-        )
-
     if existing and not existing.is_email_verified:
         # Update details for re-attempted unverified registration
         existing.hashed_password = hash_password(user_data.password)
@@ -118,16 +107,29 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
         enforce_cooldown=bool(existing),
     )
 
-    NotificationService.send_email_otp(
-        to_email=normalized_email,
-        otp_code=otp_code,
-        full_name=target_user.full_name or "Analyst",
-    )
+    dev_otp = None
+    if settings.is_gmail_configured:
+        try:
+            NotificationService.send_email_otp(
+                to_email=normalized_email,
+                otp_code=otp_code,
+                full_name=target_user.full_name or "Analyst",
+            )
+            msg = f"A 6-digit verification code has been sent to {normalized_email}. Please check your inbox (and Spam folder)."
+        except Exception as e:
+            print(f"[OTP WARNING] Gmail delivery error: {e}. Fallback code: {otp_code}")
+            dev_otp = otp_code
+            msg = f"Verification code: {otp_code} (Gmail delivery issue: {e})"
+    else:
+        print(f"[OTP DEV MODE] 🔑 6-Digit OTP for {normalized_email}: {otp_code}")
+        dev_otp = otp_code
+        msg = f"6-digit verification code: {otp_code} (Gmail SMTP not configured in .env, code shown for quick testing)."
 
     return {
         "requires_verification": True,
         "email": normalized_email,
-        "message": f"A 6-digit verification code has been sent to {normalized_email}. Please check your inbox.",
+        "message": msg,
+        "dev_otp": dev_otp,
     }
 
 
@@ -179,16 +181,30 @@ def resend_email_otp(payload: ResendEmailOTPRequest, db: Session = Depends(get_d
         purpose="register",
         enforce_cooldown=True,
     )
-    NotificationService.send_email_otp(
-        to_email=normalized_email,
-        otp_code=otp_code,
-        full_name=user.full_name or "Analyst",
-    )
+
+    dev_otp = None
+    if settings.is_gmail_configured:
+        try:
+            NotificationService.send_email_otp(
+                to_email=normalized_email,
+                otp_code=otp_code,
+                full_name=user.full_name or "Analyst",
+            )
+            msg = f"A new 6-digit verification code was sent to {normalized_email}."
+        except Exception as e:
+            print(f"[OTP WARNING] Gmail delivery error: {e}. Fallback code: {otp_code}")
+            dev_otp = otp_code
+            msg = f"New verification code: {otp_code}"
+    else:
+        print(f"[OTP DEV MODE] 🔑 New 6-Digit OTP for {normalized_email}: {otp_code}")
+        dev_otp = otp_code
+        msg = f"New verification code: {otp_code} (Demo/Dev mode active)."
 
     return {
         "requires_verification": True,
         "email": normalized_email,
-        "message": f"A new 6-digit verification code was sent to {normalized_email}.",
+        "message": msg,
+        "dev_otp": dev_otp,
     }
 
 

@@ -21,6 +21,7 @@ class RegisterPendingResponse(BaseModel):
     requires_verification: bool = True
     email: str
     message: str
+    dev_otp: Optional[str] = None
 
 
 class VerifyEmailOTPRequest(BaseModel):
